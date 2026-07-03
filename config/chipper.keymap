@@ -14,6 +14,40 @@
 #define PNT 5  // mouse
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        // One-handed reset/bootloader combos (3-key vertical columns).
+        // sys_reset  = soft reset (reboot firmware)
+        // bootloader = UF2 flashing mode (keyboard mounts as USB drive)
+        // Note: right-half combos require the halves to be paired;
+        //       if pairing is broken, use the physical RST button (double-tap).
+
+        combo_boot_left {  // Q + A + Z (outer column)
+            timeout-ms = <75>;
+            key-positions = <1 13 25>;
+            bindings = <&bootloader>;
+        };
+
+        combo_reset_left {  // T + G + B (inner column)
+            timeout-ms = <75>;
+            key-positions = <5 17 29>;
+            bindings = <&sys_reset>;
+        };
+
+        combo_boot_right {  // P + ; + / (outer column)
+            timeout-ms = <75>;
+            key-positions = <10 22 34>;
+            bindings = <&bootloader>;
+        };
+
+        combo_reset_right {  // Y + H + N (inner column)
+            timeout-ms = <75>;
+            key-positions = <6 18 30>;
+            bindings = <&sys_reset>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 

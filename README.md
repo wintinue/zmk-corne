@@ -8,7 +8,7 @@ This repository contains a customized **[ZMK firmware](https://zmk.dev/docs)** f
 - 📡 **Bluetooth Multi-Device Support** for seamless switching between up to 5 devices.
 - 🎭 **Tap & Hold Behavior** for dual-function keys.
 - 🖱 **Mouse Layer** for cursor movement and scrolling.
-- 🔄 **Firmware Reset & Bootloader Access** via dedicated keys.
+- 🔄 **Firmware Reset & Bootloader Access** via dedicated keys and **one-handed combos**.
 
 ---
 
@@ -120,9 +120,7 @@ This repository contains a customized **[ZMK firmware](https://zmk.dev/docs)** f
   - `BT_SEL 0-4` → Switch to paired devices.
   - `BT_CLR` → Clear Bluetooth pairing.
   - `BT_PRV / BT_NXT` → Cycle through devices.
-- **Firmware reset & bootloader mode:**
-  - `sys_reset` → Soft reset.
-  - `bootloader` → Enters bootloader for flashing firmware.
+- **Firmware reset & bootloader mode:** see [Firmware Reset & Bootloader](#firmware-reset--bootloader) for the difference and one-handed combos.
 
 #### **6️⃣ Mouse (`PNT 5`)**
 ```
@@ -166,15 +164,42 @@ Once paired, switch devices using:
 
 ## **Firmware Reset & Bootloader**
 
-- **Reboot Keyboard:** Press the **reset key** (mapped in `SYS` layer).
-- **Enter Bootloader Mode:** Press the **bootloader key** or double-tap the **RST** button.
+### **Reset vs. Bootloader**
 
-🔹 `&sys_reset` → Soft reset (restarts the keyboard)  
-🔹 `&bootloader` → Enters bootloader mode for flashing firmware
+| | `&sys_reset` (Reset) | `&bootloader` (Boot) |
+|---|---|---|
+| **What it does** | Soft reset — reboots the firmware | Enters bootloader (UF2 flashing mode) |
+| **Right after** | Works as a keyboard again in a few seconds | Stops acting as a keyboard; mounts as a **USB drive** |
+| **Use for** | Fixing temporary glitches (connection issues, freezes) | Flashing new firmware (`.uf2`) |
+| **Recovery** | Automatic | Flash firmware or press the physical **RST** button |
 
+In short: **Reset = reboot, Boot = firmware install mode.**
 
-- After reset the keyboard, press Space + P | Z to turn on SYS layer
-- Further keymap for reset keymap: https://github.com/wintinue/zmk-corne/blob/main/config/boards/shields/chipper/chipper.keymap
+### **How to Trigger**
+
+1. **One-handed combos** — press all 3 keys of a vertical column at once (base layers):
+
+   | Half | Boot (outer column) | Reset (inner column) |
+   |---|---|---|
+   | **Left** | `Q + A + Z` | `T + G + B` |
+   | **Right** | `P + ; + /` | `Y + H + N` |
+
+2. **SYS layer keys** — activate `SYS` (after reset: `Space + P` or `Z`), then press the `Boot` / `Reset` key.
+3. **Physical RST button** — double-tap (quickly, twice) the [**RST** button](https://wiki.seeedstudio.com/XIAO_BLE/#hardware-overview) to enter bootloader mode. Works on each half independently, even when pairing is broken.
+
+> ⚠️ Combos and SYS-layer keys on the **right half only work while the halves are paired** — right-half key presses are processed by the left (central) half. If pairing is broken, the physical RST button is the only way in.
+
+### **Re-pairing the Halves (settings_reset)**
+
+If the two halves lose their pairing with each other:
+
+1. **Flash `settings_reset` to BOTH halves** (one at a time): connect via USB → double-tap **RST** → copy `settings_reset-…-zmk.uf2` to the mounted drive. Doing only one half will fail — the other half still holds stale bonding info.
+2. **Flash the normal firmware back**: `chipper_left.uf2` to the left, `chipper_right.uf2` to the right (same double-tap procedure).
+3. **Power on both halves together**, close to each other — they pair automatically on first boot.
+4. **Re-pair with your computer**: delete the old keyboard entry from the OS Bluetooth settings, then pair again.
+
+All three `.uf2` files (`settings_reset`, `chipper_left`, `chipper_right`) are included in the GitHub Actions build artifact.
+
 ---
 
 ## **Contributing**
