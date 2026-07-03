@@ -17,34 +17,30 @@
     combos {
         compatible = "zmk,combos";
 
-        // One-handed reset/bootloader combos (3-key vertical columns).
-        // sys_reset  = soft reset (reboot firmware)
-        // bootloader = UF2 flashing mode (keyboard mounts as USB drive)
-        // Note: right-half combos require the halves to be paired;
-        //       if pairing is broken, use the physical RST button (double-tap).
+        // One-handed SYS access. Combo-invoked behaviors always run on the
+        // central half (combo.c hardcodes source = LOCAL), so reset/bootloader
+        // must NOT be bound to combos directly. Instead the combo opens the
+        // SYS layer (sticky, ~1s); the following real key press keeps its own
+        // source, so &bootloader / &sys_reset run on the half it is pressed on:
+        //   left : tap Q+C  then G = bootloader, B = sys_reset
+        //   right: tap P+,  then H = bootloader, N = sys_reset
+        // Right-half access still requires the halves to be paired; if pairing
+        // is broken, use the physical RST button (double-tap) instead.
 
-        combo_boot_left {  // Q + A + Z (outer column)
-            timeout-ms = <75>;
-            key-positions = <1 13 25>;
-            bindings = <&bootloader>;
+        combo_sys_left {  // Q + C
+            timeout-ms = <50>;
+            key-positions = <1 27>;
+            bindings = <&sl SYS>;
+            layers = <MAC WIN>;
+            require-prior-idle-ms = <125>;
         };
 
-        combo_reset_left {  // T + G + B (inner column)
-            timeout-ms = <75>;
-            key-positions = <5 17 29>;
-            bindings = <&sys_reset>;
-        };
-
-        combo_boot_right {  // P + ; + / (outer column)
-            timeout-ms = <75>;
-            key-positions = <10 22 34>;
-            bindings = <&bootloader>;
-        };
-
-        combo_reset_right {  // Y + H + N (inner column)
-            timeout-ms = <75>;
-            key-positions = <6 18 30>;
-            bindings = <&sys_reset>;
+        combo_sys_right {  // P + ,
+            timeout-ms = <50>;
+            key-positions = <10 32>;
+            bindings = <&sl SYS>;
+            layers = <MAC WIN>;
+            require-prior-idle-ms = <125>;
         };
     };
 

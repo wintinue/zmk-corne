@@ -177,13 +177,14 @@ In short: **Reset = reboot, Boot = firmware install mode.**
 
 ### **How to Trigger**
 
-1. **One-handed combos** — press all 3 keys of a vertical column at once (base layers):
+1. **One-handed combo → key** — tap the combo (both keys at once), then tap the target key within ~1s:
 
-   | Half | Boot (outer column) | Reset (inner column) |
-   |---|---|---|
-   | **Left** | `Q + A + Z` | `T + G + B` |
-   | **Right** | `P + ; + /` | `Y + H + N` |
+   | Half | Open SYS (combo) | then Boot | then Reset |
+   |---|---|---|---|
+   | **Left** | `Q + C` | `G` | `B` |
+   | **Right** | `P + ,` | `H` | `N` |
 
+   The combo opens the `SYS` layer (sticky); the second tap is a real key press, so it acts on the half where it is pressed. Binding `&bootloader`/`&sys_reset` to a combo directly would NOT work for the right half — combo-invoked behaviors always execute on the left (central) half.
 2. **SYS layer keys** — activate `SYS` (after reset: `Space + P` or `Z`), then press the `Boot` / `Reset` key.
 3. **Physical RST button** — double-tap (quickly, twice) the [**RST** button](https://wiki.seeedstudio.com/XIAO_BLE/#hardware-overview) to enter bootloader mode. Works on each half independently, even when pairing is broken.
 
